@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import ru.yandex.praktikum.LoginPage;
 import ru.yandex.praktikum.BasePage;
 import ru.yandex.praktikum.RegisterPage;
+import ru.yandex.praktikum.SuccessfulLoginPage;
 import ru.yandex.praktikum.api.UserRegisterApi;
 import ru.yandex.praktikum.utils.FakerData;
 import ru.yandex.praktikum.utils.TestContext;
@@ -48,7 +49,10 @@ public class RegistrationSteps {
 
     @Тогда("отображается ошибка о существующем пользователе")
     public void checkUserAlreadyExistsError() {
-        // Проверка через API
+        //UI проверка
+        registerPage.shouldSeeRegistrationError();
+
+        // Опционально оставил api проверку
         Response response = registerApi.register(context.getEmail(), context.getPassword());
         response.then().statusCode(400);
 
@@ -60,14 +64,22 @@ public class RegistrationSteps {
     @Тогда("пользователь успешно зарегистрирован")
     public void checkSuccessfulRegistration() {
         BasePage basePage = new BasePage();
+        SuccessfulLoginPage successfulLoginPage = new SuccessfulLoginPage();
+        successfulLoginPage.clickProfileButton();           // нажимаем на иконку профиля
+        successfulLoginPage.shouldSeeMyProfilePage();       // проверяем заголовок "Мой профиль"
+
+        // Дополнительная проверка
         basePage.shouldNotSeeAuthButton();
+
+        System.out.println("✅ Пользователь успешно зарегистрирован и находится в личном кабинете");
+
+
     }
 
     @И("заполняет форму регистрации новыми уникальными данными")
     public void fillRegistrationFormWithNewData() {
         String email = FakerData.email();
         String password = FakerData.password();
-
 
         registerPage.register(email, password);
 

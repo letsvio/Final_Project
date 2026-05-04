@@ -6,6 +6,10 @@ import ru.yandex.praktikum.*;
 import ru.yandex.praktikum.api.*;
 import ru.yandex.praktikum.utils.*;
 
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$x;
+
 public class AdSteps {
 
     private final CreateAdPage createAdPage;
@@ -153,6 +157,8 @@ public class AdSteps {
                 CategoryData.Книги.name(),
                 CityData.MOSCOW.getValue()
         );
+        $x("//h2[contains(@class,'h2') and contains(text(),'" + context.getLastAdTitle() + "')]")
+                .shouldBe(visible.because("Объявление должно быть видно после поиска"));
     }
 
     private void assertAdNotVisible() {
@@ -161,5 +167,8 @@ public class AdSteps {
                 CategoryData.Книги.name(),
                 CityData.MOSCOW.getValue()
         );
+        $x("//h2[contains(@class,'h2') and contains(text(),'" + context.getLastAdTitle() + "')]")
+                .shouldNotBe(visible)
+                .shouldNotBe(exist);
     }
 }

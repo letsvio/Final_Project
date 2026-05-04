@@ -2,6 +2,7 @@ package ru.yandex.praktikum;
 
 import com.codeborne.selenide.SelenideElement;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class RegisterPage {
@@ -17,11 +18,18 @@ public class RegisterPage {
     // Кнопка регистрации
     private final SelenideElement registerAccountButton = $x("//button[contains(text(), 'Создать аккаунт')]");
 
+    // Сообщение об ошибке
+    private final SelenideElement errorMessage =
+            $x("//span[contains(@class,'input_span') and text()='Ошибка']");
 
     public void register(String email, String password) {
         emailInput.setValue(email);
         passwordInput.setValue(password);
         repeatPasswordInput.setValue(password);
         registerAccountButton.click();
+    }
+
+    public void shouldSeeRegistrationError() {
+        errorMessage.shouldBe(visible);
     }
 }

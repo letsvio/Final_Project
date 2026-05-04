@@ -19,6 +19,12 @@ public class SuccessfulLoginPage {
     private final SelenideElement cityDropdown =
             $x("//input[@name='city']/following-sibling::button");
 
+    private final SelenideElement profileButton =
+            $x("//button[contains(@class, 'circleSmall')]");
+
+    private final SelenideElement myProfileTitle =
+            $x("//h1[contains(@class, 'h1') and contains(text(), 'Мой профиль')]");
+
     public void clickCategoryDropdown(String category) {
         categoryDropdown.shouldBe(visible).click();
         $x("//span[text()='" + category + "']").shouldBe(visible).click();
@@ -35,6 +41,14 @@ public class SuccessfulLoginPage {
 
     public void clickButtonSubmit() {
         buttonSubmit.click();
+    }
+
+    public void clickProfileButton() {
+        profileButton.shouldBe(visible).click();
+    }
+
+    public void shouldSeeMyProfilePage() {
+        myProfileTitle.shouldBe(visible.because("Должен отображаться заголовок 'Мой профиль'"));
     }
 
     public void searchAdByFilters (String title, String category, String city) {
